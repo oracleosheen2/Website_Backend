@@ -14,6 +14,13 @@ import addressRoutes from "./routes/addressRoutes.js";
 import zodiacRoutes from "./routes/zodiacRoutes.js";
 import rishiRoutes from "./routes/rishiRoutes.js";
 import horoscopeRoutes from "./routes/horoscopeRoutes.js";
+import membershipRoutes from "./routes/membershipRoutes.js";
+import benefitRoutes from "./routes/benefitRoutes.js";
+import faqRoutes from "./routes/faqRoutes.js";
+import testimonialRoutes from "./routes/testimonialRoutes.js";
+import astrologerRoutes from "./routes/astrologerRoutes.js";
+import readingPackageRoutes from "./routes/readingPackageRoutes.js";
+import readingServiceRoutes from "./routes/readingServiceRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -36,6 +43,13 @@ app.use("/api/addresses", addressRoutes);
 app.use("/api/zodiacs", zodiacRoutes);
 app.use("/api/rishis", rishiRoutes);
 app.use("/api/horoscope", horoscopeRoutes);
+app.use("/api/memberships", membershipRoutes);
+app.use("/api/benefits", benefitRoutes);
+app.use("/api/faqs", faqRoutes);
+app.use("/api/testimonials", testimonialRoutes);
+app.use("/api/astrologers", astrologerRoutes);
+app.use("/api/reading-packages", readingPackageRoutes);
+app.use("/api/reading-services", readingServiceRoutes);
 // Health Check Route
 app.get("/", (req, res) => {
   res.send("API is running...");
