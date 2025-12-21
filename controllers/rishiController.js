@@ -1,4 +1,4 @@
-import Rishi from "../models/Rishi.js";
+import Rishi from "../models/rishi.js";
 
 // Add a new Rishi
 export const addRishi = async (req, res) => {
