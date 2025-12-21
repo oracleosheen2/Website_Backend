@@ -1,4 +1,4 @@
-import Horoscope from "../models/Horoscope.js";
+import Horoscope from "../models/horoscope.js";
 
 // Add new Horoscope prediction
 export const addHoroscope = async (req, res) => {
