@@ -30,20 +30,74 @@ const router = express.Router();
  *         application/json:
  *           schema:
  *             type: object
+ *             required: ["type", "name", "address", "phone"]
  *             properties:
- *               street:
+ *               type:
  *                 type: string
- *               city:
+ *                 description: Address type
+ *                 example: "Home"
+ *                 enum: ["Home", "Work", "Other"]
+ *               name:
  *                 type: string
- *               state:
+ *                 description: Recipient name
+ *                 example: "John Doe"
+ *               address:
  *                 type: string
- *               postalCode:
+ *                 description: Full address
+ *                 example: "123 Main St, New York, NY 10001"
+ *               phone:
  *                 type: string
- *               country:
- *                 type: string
+ *                 description: Contact phone number
+ *                 example: "+1234567890"
+ *               isDefault:
+ *                 type: boolean
+ *                 description: Set as default address
+ *                 default: false
+ *                 example: false
  *     responses:
  *       201:
  *         description: Address added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Address added successfully"
+ *                 addresses:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Address'
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "\"phone\" is required"
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found"
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 router.post("/", protect, addAddress);
 
@@ -58,6 +112,15 @@ router.post("/", protect, addAddress);
  *     responses:
  *       200:
  *         description: List of all addresses
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 addresses:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Address'
  */
 router.get("/", protect, getAddresses);
 
@@ -83,19 +146,30 @@ router.get("/", protect, getAddresses);
  *           schema:
  *             type: object
  *             properties:
- *               street:
+ *               type:
  *                 type: string
- *               city:
+ *               name:
  *                 type: string
- *               state:
+ *               address:
  *                 type: string
- *               postalCode:
+ *               phone:
  *                 type: string
- *               country:
- *                 type: string
+ *               isDefault:
+ *                 type: boolean
  *     responses:
  *       200:
  *         description: Address updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 addresses:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Address'
  */
 router.put("/:addressId", protect, updateAddress);
 
@@ -117,6 +191,17 @@ router.put("/:addressId", protect, updateAddress);
  *     responses:
  *       200:
  *         description: Address deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 addresses:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Address'
  */
 router.delete("/:addressId", protect, deleteAddress);
 

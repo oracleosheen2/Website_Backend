@@ -1,9 +1,32 @@
 import User from "../models/user.js";
 import Joi from "joi";
 
+// Normalize legacy address payloads (street/city/state/postalCode/country)
+// Converts legacy fields into { type, name, address, phone, isDefault }
+function normalizeAddressPayload(body) {
+  if (!body) return body;
+  const hasLegacy = body.street || body.city || body.state || body.postalCode || body.country;
+  if (!hasLegacy) return body;
+
+  const parts = [body.street, body.city, body.state, body.postalCode, body.country].filter(Boolean);
+  const address = parts.join(", ");
+
+  return {
+    ...body,
+    address: body.address || address,
+    type: body.type || "Other",
+    name: body.name || body.recipient || "Unknown",
+    phone: body.phone || "",
+    isDefault: typeof body.isDefault === 'boolean' ? body.isDefault : false,
+  };
+}
+
 // ------------ ADD ADDRESS ------------
 export const addAddress = async (req, res) => {
   try {
+    // Accept legacy address payloads and normalize fields
+    req.body = normalizeAddressPayload(req.body);
+
     const schema = Joi.object({
       type: Joi.string().required(),
       name: Joi.string().required(),
@@ -26,7 +49,7 @@ export const addAddress = async (req, res) => {
     user.addresses.push(req.body);
     await user.save();
 
-    res.json({ message: "Address added successfully", addresses: user.addresses });
+    res.status(201).json({ message: "Address added successfully", addresses: user.addresses });
 
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -49,6 +72,9 @@ export const getAddresses = async (req, res) => {
 // ------------ UPDATE ADDRESS ------------
 export const updateAddress = async (req, res) => {
   try {
+    // Accept legacy address payloads and normalize fields
+    req.body = normalizeAddressPayload(req.body);
+
     const schema = Joi.object({
       type: Joi.string().optional(),
       name: Joi.string().optional(),
