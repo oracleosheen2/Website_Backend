@@ -49,13 +49,13 @@ export const getAstrologerById = async (req, res) => {
 
 export const createAstrologer = async (req, res) => {
   try {
-    const { error } = astrologerSchema.validate(req.body);
+    const { value, error } = astrologerSchema.validate(req.body, { stripUnknown: true });
     if (error) return res.status(400).json({ message: error.message });
 
-    const exists = await Astrologer.findOne({ id: req.body.id });
+    const exists = await Astrologer.findOne({ id: value.id });
     if (exists) return res.status(400).json({ message: "Astrologer id already exists" });
 
-    const created = await Astrologer.create(req.body);
+    const created = await Astrologer.create(value);
     return res.status(201).json(created);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -64,10 +64,12 @@ export const createAstrologer = async (req, res) => {
 
 export const updateAstrologer = async (req, res) => {
   try {
-    const { error } = astrologerSchema.validate({ ...req.body, id: Number(req.params.id) });
+    const { value, error } = astrologerSchema.validate({ ...req.body, id: Number(req.params.id) }, { stripUnknown: true });
     if (error) return res.status(400).json({ message: error.message });
 
-    const updated = await Astrologer.findOneAndUpdate({ id: Number(req.params.id) }, req.body, { new: true });
+    const { id, ...updateBody } = value;
+
+    const updated = await Astrologer.findOneAndUpdate({ id: Number(req.params.id) }, updateBody, { new: true });
     if (!updated) return res.status(404).json({ message: "Astrologer not found" });
     return res.json(updated);
   } catch (error) {

@@ -34,6 +34,8 @@ app.use(cookieParser());
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// expose raw swagger JSON for quick inspection
+app.get("/api-docs.json", (req, res) => res.json(swaggerSpec));
 
 // API Routes
 app.use("/api/auth", authRoutes);

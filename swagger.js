@@ -19,6 +19,12 @@ const options = {
         url: "http://localhost:5000",
       },
     ],
+    tags: [
+      {
+        name: "Astrologers",
+        description: "Astrologer API Endpoints",
+      },
+    ],
     components: {
       securitySchemes: {
         BearerAuth: {
@@ -130,6 +136,31 @@ const options = {
             pricing: { type: "string" },
             image: { type: "string" },
             theme: { type: "string" },
+            createdAt: { type: "string" },
+            updatedAt: { type: "string" },
+          },
+        },
+        Astrologer: {
+          type: "object",
+          required: ["id", "name"],
+          properties: {
+            id: { type: "number" },
+            name: { type: "string" },
+            experience: { type: "string" },
+            specialization: { type: "string" },
+            rating: { type: "number" },
+            reviews: { type: "integer" },
+            expertise: { type: "array", items: { type: "string" } },
+            languages: { type: "array", items: { type: "string" } },
+            image: { type: "string" },
+            whatsappNumber: { type: "string" },
+            about: { type: "string" },
+            successRate: { type: "string" },
+            clientsHelped: { type: "string" },
+            consultationFee: { type: "string" },
+            responseTime: { type: "string" },
+            availability: { type: "string" },
+            skills: { type: "array", items: { type: "string" } },
             createdAt: { type: "string" },
             updatedAt: { type: "string" },
           },

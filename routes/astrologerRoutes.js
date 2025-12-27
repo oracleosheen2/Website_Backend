@@ -25,6 +25,12 @@ const router = express.Router();
  *     responses:
  *       200:
  *         description: List of astrologers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Astrologer'
  */
 router.get("/", getAstrologers);
 
@@ -43,6 +49,10 @@ router.get("/", getAstrologers);
  *     responses:
  *       200:
  *         description: Astrologer object
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Astrologer'
  *       404:
  *         description: Not found
  */
@@ -59,10 +69,14 @@ router.get("/:id", getAstrologerById);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
+ *             $ref: '#/components/schemas/Astrologer'
  *     responses:
  *       201:
  *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Astrologer'
  */
 router.post("/", createAstrologer);
 
