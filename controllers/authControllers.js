@@ -13,21 +13,25 @@ export const register = async (req, res) => {
       name: Joi.string().required(),
       email: Joi.string().email().required(),
       password: Joi.string().min(6).required(),
+      type: Joi.string().valid("user", "admin").optional(),
     });
 
     const { error } = schema.validate(req.body);
     if (error) return res.status(400).json({ message: error.message });
 
-    const { name, email, password } = req.body;
+    const { name, email, password, type } = req.body;
+
+    // Prevent assigning admin role during public registration
+    // if (type === "admin") return res.status(403).json({ message: "Cannot assign admin role" });
 
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
     const hashed = await bcrypt.hash(password, 10);
 
-    user = await User.create({ name, email, password: hashed });
+    user = await User.create({ name, email, password: hashed, type: type || undefined });
 
-    res.json({ message: "Registration successful" });
+    res.json({ message: "Registration successful", user: { id: user._id, name: user.name, email: user.email, type: user.type } });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -59,7 +63,7 @@ export const login = async (req, res) => {
     res.json({
       message: "Login successful",
       token,
-      user: { id: user._id, name: user.name, email: user.email },
+      user: { id: user._id, name: user.name, email: user.email, type: user.type },
     });
 
   } catch (error) {

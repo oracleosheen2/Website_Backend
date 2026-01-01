@@ -5,7 +5,10 @@ import {
   getProduct,
   updateProduct,
   deleteProduct,
+  addReview,
 } from "../controllers/productControllers.js";
+import { protect } from "../middlewares/authMiddleware.js";
+import { isAdmin } from "../middlewares/isAdmin.js";
 
 const router = express.Router();
 
@@ -36,7 +39,7 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Product'
  */
-router.post("/", createProduct);
+router.post("/",createProduct);
 
 /**
  * @swagger
@@ -83,6 +86,38 @@ router.get("/:id", getProduct);
 
 /**
  * @swagger
+ * /api/products/{id}/reviews:
+ *   post:
+ *     summary: Add a review to a product (Admin only)
+ *     tags: [Products]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Product ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               rating:
+ *                 type: number
+ *               comment:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Review added
+ */
+router.post("/:id/reviews", protect, isAdmin, addReview);
+
+/**
+ * @swagger
  * /api/products/{id}:
  *   put:
  *     summary: Update a product
@@ -108,7 +143,7 @@ router.get("/:id", getProduct);
  *             schema:
  *               $ref: '#/components/schemas/Product'
  */
-router.put("/:id", updateProduct);
+router.put("/:id", protect, isAdmin, updateProduct);
 
 /**
  * @swagger
@@ -127,6 +162,6 @@ router.put("/:id", updateProduct);
  *       200:
  *         description: Product deleted successfully
  */
-router.delete("/:id", deleteProduct);
+router.delete("/:id", protect, isAdmin, deleteProduct);
 
 export default router;

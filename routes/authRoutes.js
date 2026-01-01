@@ -63,6 +63,10 @@ const router = express.Router();
  *                 type: string
  *               password:
  *                 type: string
+ *               type:
+ *                 type: string
+ *                 enum: ["user", "admin"]
+ *                 description: Optional. Setting "admin" via public register is not allowed.
  *     responses:
  *       200:
  *         description: Registration successful

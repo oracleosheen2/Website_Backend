@@ -41,6 +41,7 @@ const options = {
             name: { type: "string" },
             email: { type: "string" },
             password: { type: "string" },
+            type: { type: "string", enum: ["user", "admin"], default: "user" },
             createdAt: { type: "string" },
             updatedAt: { type: "string" },
           },
@@ -58,10 +59,28 @@ const options = {
             description: { type: "string" },
             category: { type: "string" },
             inStock: { type: "boolean" },
+            hasColorOptions: { type: "boolean" },
+            colors: { type: "array", items: { type: "string" } },
+            sizeOptions: { type: "array", items: { type: "number" } },
+            reviews: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  admin: { type: "string" },
+                  rating: { type: "number" },
+                  comment: { type: "string" },
+                  createdAt: { type: "string" },
+                },
+              },
+            },
+            averageRating: { type: "number" },
+            reviewCount: { type: "number" },
             createdAt: { type: "string" },
             updatedAt: { type: "string" },
           },
         },
+
         Order: {
           type: "object",
           properties: {
